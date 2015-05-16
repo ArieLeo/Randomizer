@@ -3,16 +3,20 @@ using System.Collections;
 
 namespace Randomizer {
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// <list type="bullet">
+    /// <item>
+    /// Interval type inspector option will have effect only when the Start
+    /// method is called.
+    /// </item>
+    /// </list>
+    /// </remarks>
     public class Randomizer : MonoBehaviour {
 
         #region FIELDS
-
-        /// Helper variable.
-        ///
-        /// In-game time to next trigger.
-        /// Used in 'Random' option.
-        private float timeToTrigger;
-
         #endregion
 
         #region INSPECTOR FIELDS
@@ -31,6 +35,7 @@ namespace Randomizer {
 
         [SerializeField]
         private float maxInterval;
+
         #endregion
 
         #region PROPERTIES
@@ -40,16 +45,14 @@ namespace Randomizer {
         /// </summary>
         public bool State { get; private set; }
 
-        /// <summary>
-        /// Initial delay.
-        /// </summary>
         public float InitDelay {
             get { return initDelay; }
             set { initDelay = value; }
         }
 
         /// <summary>
-        /// Time between consequent triggers.
+        /// Time between consequent state changes. Used with fixed interval
+        /// type.
         /// </summary>
         public float Interval {
             get { return interval; }
@@ -57,24 +60,19 @@ namespace Randomizer {
         }
 
         /// <summary>
-        /// Interval type.
+        /// Decides when class state will be toggled. For eg. it can be
+        /// toggled in fixed time steps or randomly.
         /// </summary>
         public IntervalTypes IntervalType {
             get { return intervalType; }
             set { intervalType = value; }
         }
 
-        /// <summary>
-        /// Minimum interval.
-        /// </summary>
         public float MinInterval {
             get { return minInterval; }
             set { minInterval = value; }
         }
 
-        /// <summary>
-        /// Maximum interval.
-        /// </summary>
         public float MaxInterval {
             get { return maxInterval; }
             set { maxInterval = value; }
@@ -105,16 +103,12 @@ namespace Randomizer {
         private IEnumerator RandomTimeTrigger() {
             yield return new WaitForSeconds(InitDelay);
 
-            var randomInterval = 0f;
-
             while (true) {
-                if (Time.time > timeToTrigger) {
-                    // Toggle state.
-                    State = !State;
+                // Toggle state.
+                State = !State;
 
-                    // Calculate random time to wait.
-                    randomInterval = Random.Range(MinInterval, MaxInterval);
-                }
+                // Calculate random time to wait.
+                var randomInterval = Random.Range(MinInterval, MaxInterval);
 
                 yield return new WaitForSeconds(randomInterval);
             }
