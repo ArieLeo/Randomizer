@@ -12,12 +12,6 @@ namespace Randomizer {
         /// Used in 'Random' option.
         private float timeToTrigger;
 
-        /// Result that the component returns.
-        ///
-        /// This property can be read by another component in order to execute
-        /// action at a random intervals.
-        private bool result;
-
         #endregion
 
         #region INSPECTOR FIELDS
@@ -43,8 +37,40 @@ namespace Randomizer {
         #endregion
 
         #region PROPERTIES
-        public bool Result {
-            get { return result; }
+
+        /// <summary>
+        /// The class output value. Use it to trigger actions in your game.
+        /// </summary>
+        public bool Result { get; private set; }
+
+        /// Initial delay.
+        public float InitDelay {
+            get { return initDelay; }
+            set { initDelay = value; }
+        }
+
+        /// Time between consequent triggers.
+        public float Interval {
+            get { return interval; }
+            set { interval = value; }
+        }
+
+        /// Interval type.
+        public IntervalTypes IntervalType {
+            get { return intervalType; }
+            set { intervalType = value; }
+        }
+
+        /// Minimum interval.
+        public float MinInterval {
+            get { return minInterval; }
+            set { minInterval = value; }
+        }
+
+        /// Maximum interval.
+        public float MaxInterval {
+            get { return maxInterval; }
+            set { maxInterval = value; }
         }
 
         #endregion
@@ -53,25 +79,25 @@ namespace Randomizer {
 
         private void Start () {
             // Handle 'Fixed' interval type.
-            if (intervalType == IntervalTypes.Fixed) {
-                Invoke("Trigger", initDelay);
+            if (IntervalType == IntervalTypes.Fixed) {
+                Invoke("Trigger", InitDelay);
             }
         }
 
         private void Update () {
             /// Handle 'Random' interval option.
-            if (intervalType == IntervalTypes.Random) {
+            if (IntervalType == IntervalTypes.Random) {
                 // Wait random interval before trigger.
                 if (Time.time > timeToTrigger) {
                     float interval;
 
                     // Calculate new random interval.
-                    interval = Random.Range(minInterval, maxInterval);
+                    interval = Random.Range(MinInterval, MaxInterval);
                     // Update time to next trigger.
                     timeToTrigger = Time.time + interval;
 
                     // Trigger.
-                    result = !result;
+                    Result = !Result;
                 }
             }
         }
@@ -83,7 +109,7 @@ namespace Randomizer {
         /// Method that triggers the '_result' in time intervals.
         private void Trigger() {
             // Change component state right after initial delay.
-            result = !result;
+            Result = !Result;
 
             //  Change controller state in fixed intervals.
             //StartCoroutine(Timer.Start(
@@ -97,8 +123,8 @@ namespace Randomizer {
 
         private IEnumerator TriggerResult() {
             while (true) {
-                result = !result;
-                yield return new WaitForSeconds(interval);
+                Result = !Result;
+                yield return new WaitForSeconds(Interval);
             }
         }
 
