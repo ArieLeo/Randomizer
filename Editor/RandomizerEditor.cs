@@ -8,18 +8,18 @@ namespace Randomizer {
     [CustomEditor(typeof (Randomizer))]
     public class RandomizerEditor : Editor {
 
-        private SerializedProperty _initDelay;
-        private SerializedProperty _interval;
-        private SerializedProperty _intervalType;
-        private SerializedProperty _minInterval;
-        private SerializedProperty _maxInterval;
+        private SerializedProperty initDelay;
+        private SerializedProperty interval;
+        private SerializedProperty intervalType;
+        private SerializedProperty minInterval;
+        private SerializedProperty maxInterval;
 
         private void OnEnable() {
-            _initDelay = serializedObject.FindProperty("_initDelay");
-            _interval = serializedObject.FindProperty("_interval");
-            _intervalType = serializedObject.FindProperty("_intervalType");
-            _minInterval = serializedObject.FindProperty("_minInterval");
-            _maxInterval = serializedObject.FindProperty("_maxInterval");
+            initDelay = serializedObject.FindProperty("initDelay");
+            interval = serializedObject.FindProperty("interval");
+            intervalType = serializedObject.FindProperty("intervalType");
+            minInterval = serializedObject.FindProperty("minInterval");
+            maxInterval = serializedObject.FindProperty("maxInterval");
         }
 
         public override void OnInspectorGUI() {
@@ -28,24 +28,24 @@ namespace Randomizer {
             EditorGUILayout.BeginHorizontal();
             EditorGUIUtility.labelWidth = 70;
             EditorGUILayout.PropertyField(
-                _initDelay,
+                initDelay,
                 GUILayout.MaxWidth(120));
             EditorGUIUtility.labelWidth = 40;
             EditorGUILayout.PropertyField(
-                _intervalType,
+                intervalType,
                 new GUIContent("Type", "Type of the interval applied."));
             EditorGUILayout.EndHorizontal();
 
-            switch (_intervalType.enumValueIndex) {
+            switch (intervalType.enumValueIndex) {
                 case (int) IntervalTypes.Fixed:
                     EditorGUIUtility.labelWidth = 0;
-                    EditorGUILayout.PropertyField(_interval);
+                    EditorGUILayout.PropertyField(interval);
                     break;
                 case (int) IntervalTypes.Random:
                     EditorGUILayout.BeginHorizontal();
                     EditorGUIUtility.labelWidth = 80;
-                    EditorGUILayout.PropertyField(_minInterval);
-                    EditorGUILayout.PropertyField(_maxInterval);
+                    EditorGUILayout.PropertyField(minInterval);
+                    EditorGUILayout.PropertyField(maxInterval);
                     EditorGUILayout.EndHorizontal();
                     break;
             }
