@@ -8,11 +8,17 @@ namespace Randomizer {
     [CustomEditor(typeof (Randomizer))]
     public class RandomizerEditor : Editor {
 
+        #region SERIALIZED PROPERTIES
+
         private SerializedProperty initDelay;
         private SerializedProperty interval;
         private SerializedProperty intervalType;
         private SerializedProperty minInterval;
         private SerializedProperty maxInterval;
+
+        #endregion
+
+        #region UNITY MESSAGES
 
         private void OnEnable() {
             initDelay = serializedObject.FindProperty("initDelay");
@@ -41,6 +47,10 @@ namespace Randomizer {
 
             serializedObject.ApplyModifiedProperties();
         }
+
+        #endregion
+
+        #region INSPECTOR METHODS
 
         private void HandleIntervalTypeOption() {
             switch (intervalType.enumValueIndex) {
@@ -77,6 +87,8 @@ namespace Randomizer {
                 initDelay,
                 GUILayout.MaxWidth(120));
         }
+
+        #endregion
 
     }
 

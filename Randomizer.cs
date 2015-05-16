@@ -5,15 +5,22 @@ namespace Randomizer {
 
     public class Randomizer : MonoBehaviour {
 
+        #region FIELDS
+        /// Helper variable.
+        ///
+        /// In-game time to next trigger.
+        /// Used in 'Random' option.
+        private float timeToTrigger;
+
         /// Result that the component returns.
         ///
         /// This property can be read by another component in order to execute
         /// action at a random intervals.
         private bool result;
-        public bool Result {
-            get { return result; }
-        }
 
+        #endregion
+
+        #region INSPECTOR FIELDS
         /// Initial delay.
         [SerializeField]
         private float initDelay;
@@ -33,12 +40,16 @@ namespace Randomizer {
         /// Maximum interval.
         [SerializeField]
         private float maxInterval;
+        #endregion
 
-        /// Helper variable.
-        ///
-        /// In-game time to next trigger.
-        /// Used in 'Random' option.
-        private float timeToTrigger;
+        #region PROPERTIES
+        public bool Result {
+            get { return result; }
+        }
+
+        #endregion
+
+        #region UNITY MESSAGES
 
         private void Start () {
             // Handle 'Fixed' interval type.
@@ -65,6 +76,10 @@ namespace Randomizer {
             }
         }
 
+        #endregion
+
+        #region METHODS
+
         /// Method that triggers the '_result' in time intervals.
         private void Trigger() {
             // Change component state right after initial delay.
@@ -86,6 +101,8 @@ namespace Randomizer {
                 yield return new WaitForSeconds(interval);
             }
         }
+
+        #endregion
     }
 
 }
