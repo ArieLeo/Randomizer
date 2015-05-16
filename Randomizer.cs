@@ -38,8 +38,7 @@ namespace Randomizer {
         /// <summary>
         /// The class output value. Use it to trigger actions in your game.
         /// </summary>
-        // todo rename to State
-        public bool Result { get; private set; }
+        public bool State { get; private set; }
 
         /// <summary>
         /// Initial delay.
@@ -87,9 +86,9 @@ namespace Randomizer {
 
         private void Start () {
             // Handle 'Fixed' interval type.
-            if (IntervalType == IntervalTypes.Fixed) {
-                Invoke("Trigger", InitDelay);
-            }
+            //if (IntervalType == IntervalTypes.Fixed) {
+            //    Invoke("Trigger", InitDelay);
+            //}
         }
 
         private void Update () {
@@ -105,7 +104,7 @@ namespace Randomizer {
                     timeToTrigger = Time.time + interval;
 
                     // Trigger.
-                    Result = !Result;
+                    State = !State;
                 }
             }
         }
@@ -115,10 +114,9 @@ namespace Randomizer {
         #region METHODS
 
         /// Method that triggers the '_result' in time intervals.
-        // todo rename
         private void Trigger() {
             // Change component state right after initial delay.
-            Result = !Result;
+            State = !State;
 
             //  Change controller state in fixed intervals.
             //StartCoroutine(Timer.Start(
@@ -127,13 +125,14 @@ namespace Randomizer {
             //            () => { _result = !_result; }
             //            ));
 
-            var triggerResultCoroutine = new Task(TriggerResult());
+            var triggerResultCoroutine = new Task(FixTimeTrigger());
         }
 
-        // todo rename to ToggleState.
-        private IEnumerator TriggerResult() {
+        private IEnumerator FixTimeTrigger() {
+            yield return new WaitForSeconds(InitDelay);
+
             while (true) {
-                Result = !Result;
+                State = !State;
                 yield return new WaitForSeconds(Interval);
             }
         }
