@@ -5,8 +5,6 @@ namespace Randomizer {
 
     public class Randomizer : MonoBehaviour {
 
-        public enum IntervalTypes { Fixed, Random }
-
         /// Result that the component returns.
         ///
         /// This property can be read by another component in order to execute
@@ -89,4 +87,5 @@ namespace Randomizer {
             }
         }
     }
+
 }

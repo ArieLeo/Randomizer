@@ -37,11 +37,11 @@ namespace Randomizer {
             EditorGUILayout.EndHorizontal();
 
             switch (_intervalType.enumValueIndex) {
-                case (int) Randomizer.IntervalTypes.Fixed:
+                case (int) IntervalTypes.Fixed:
                     EditorGUIUtility.labelWidth = 0;
                     EditorGUILayout.PropertyField(_interval);
                     break;
-                case (int) Randomizer.IntervalTypes.Random:
+                case (int) IntervalTypes.Random:
                     EditorGUILayout.BeginHorizontal();
                     EditorGUIUtility.labelWidth = 80;
                     EditorGUILayout.PropertyField(_minInterval);
