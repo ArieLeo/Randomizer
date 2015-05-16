@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace OneDayGame {
+namespace Randomizer {
 
-	public class Randomizer : GameComponent {
+	public class Randomizer : MonoBehaviour {
 
 		public enum IntervalTypes { Fixed, Random }
 
@@ -42,22 +42,14 @@ namespace OneDayGame {
 		/// Used in 'Random' option.
 		private float _timeToTrigger;
 
-		public override void Awake() {
-			base.Awake();
-		}
-
-		public override void Start () {
-			base.Start();
-
+		private void Start () {
 			// Handle 'Fixed' interval type.
 			if (_intervalType == IntervalTypes.Fixed) {
 				Invoke("Trigger", _initDelay);
 			}
 		}
 
-		public override void Update () {
-			base.Update();
-
+		private void Update () {
 			/// Handle 'Random' interval option.
 			if (_intervalType == IntervalTypes.Random) {
 				// Wait random interval before trigger.
@@ -75,25 +67,26 @@ namespace OneDayGame {
 			}
 		}
 
-		public override void FixedUpdate() {
-			base.FixedUpdate();
-		}
-
-		public override void LateUpdate() {
-			base.LateUpdate();
-		}
-
 		/// Method that triggers the '_result' in time intervals.
 		private void Trigger() {
 			// Change component state right after initial delay.
 			_result = !_result;
 
 			//  Change controller state in fixed intervals.
-			StartCoroutine(Timer.Start(
-						_interval,
-						true,
-						() => { _result = !_result; }
-						));
+            //StartCoroutine(Timer.Start(
+            //            _interval,
+            //            true,
+            //            () => { _result = !_result; }
+            //            ));
+
+		    var triggerResultCoroutine = new Task(TriggerResult());
 		}
+
+	    private IEnumerator TriggerResult() {
+	        while (true) {
+	            _result = !_result;
+	            yield return new WaitForSeconds(_interval);
+	        }
+	    }
 	}
 }
