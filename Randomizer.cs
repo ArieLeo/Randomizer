@@ -80,53 +80,46 @@ namespace Randomizer {
             set { maxInterval = value; }
         }
 
+        /// <summary>
+        /// Reference to coroutine responsible for toggling
+        /// class state.
+        /// </summary>
+        public Task ToggleStateCoroutine { get; set; }
+
         #endregion
 
         #region UNITY MESSAGES
 
         private void Start () {
-            // Handle 'Fixed' interval type.
-            //if (IntervalType == IntervalTypes.Fixed) {
-            //    Invoke("Trigger", InitDelay);
-            //}
-        }
+            if (IntervalType == IntervalTypes.Fixed) {
+                ToggleStateCoroutine = new Task(FixTimeTrigger());
+            }
 
-        private void Update () {
-            // Handle 'Random' interval option.
             if (IntervalType == IntervalTypes.Random) {
-                // Wait random interval before trigger.
-                if (Time.time > timeToTrigger) {
-                    float interval;
-
-                    // Calculate new random interval.
-                    interval = Random.Range(MinInterval, MaxInterval);
-                    // Update time to next trigger.
-                    timeToTrigger = Time.time + interval;
-
-                    // Trigger.
-                    State = !State;
-                }
+                ToggleStateCoroutine = new Task(RandomTimeTrigger());
             }
         }
-
         #endregion
 
         #region METHODS
+        private IEnumerator RandomTimeTrigger() {
+            yield return new WaitForSeconds(InitDelay);
 
-        /// Method that triggers the '_result' in time intervals.
-        private void Trigger() {
-            // Change component state right after initial delay.
-            State = !State;
+            var randomInterval = 0f;
 
-            //  Change controller state in fixed intervals.
-            //StartCoroutine(Timer.Start(
-            //            _interval,
-            //            true,
-            //            () => { _result = !_result; }
-            //            ));
+            while (true) {
+                if (Time.time > timeToTrigger) {
+                    // Toggle state.
+                    State = !State;
 
-            var triggerResultCoroutine = new Task(FixTimeTrigger());
+                    // Calculate random time to wait.
+                    randomInterval = Random.Range(MinInterval, MaxInterval);
+                }
+
+                yield return new WaitForSeconds(randomInterval);
+            }
         }
+
 
         private IEnumerator FixTimeTrigger() {
             yield return new WaitForSeconds(InitDelay);
