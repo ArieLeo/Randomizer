@@ -26,35 +26,56 @@ namespace Randomizer {
             serializedObject.Update();
 
             EditorGUILayout.BeginHorizontal();
+
             EditorGUIUtility.labelWidth = 70;
-            EditorGUILayout.PropertyField(
-                initDelay,
-                GUILayout.MaxWidth(120));
+
+            DrawInitDelayField();
+
             EditorGUIUtility.labelWidth = 40;
+
+            DrawIntervalTypeDropdown();
+
+            EditorGUILayout.EndHorizontal();
+
+            HandleIntervalTypeOption();
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandleIntervalTypeOption() {
+            switch (intervalType.enumValueIndex) {
+                case (int) IntervalTypes.Fixed:
+                    DrawFixedIntervalTypeFields();
+                    break;
+                case (int) IntervalTypes.Random:
+                    DrawRandomIntervalTypeFields();
+                    break;
+            }
+        }
+
+        private void DrawFixedIntervalTypeFields() {
+            EditorGUIUtility.labelWidth = 0;
+            EditorGUILayout.PropertyField(interval);
+        }
+
+        private void DrawRandomIntervalTypeFields() {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUIUtility.labelWidth = 80;
+            EditorGUILayout.PropertyField(minInterval);
+            EditorGUILayout.PropertyField(maxInterval);
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawIntervalTypeDropdown() {
             EditorGUILayout.PropertyField(
                 intervalType,
                 new GUIContent("Type", "Type of the interval applied."));
-            EditorGUILayout.EndHorizontal();
+        }
 
-            switch (intervalType.enumValueIndex) {
-                case (int) IntervalTypes.Fixed:
-                    EditorGUIUtility.labelWidth = 0;
-                    EditorGUILayout.PropertyField(interval);
-                    break;
-                case (int) IntervalTypes.Random:
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUIUtility.labelWidth = 80;
-                    EditorGUILayout.PropertyField(minInterval);
-                    EditorGUILayout.PropertyField(maxInterval);
-                    EditorGUILayout.EndHorizontal();
-                    break;
-            }
-
-            serializedObject.ApplyModifiedProperties();
-            // Save changes
-            /*if (GUI.changed) {
-            EditorUtility.SetDirty(script);
-        }*/
+        private void DrawInitDelayField() {
+            EditorGUILayout.PropertyField(
+                initDelay,
+                GUILayout.MaxWidth(120));
         }
 
     }
