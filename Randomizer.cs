@@ -1,99 +1,130 @@
-﻿using UnityEngine;
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com)
+// 
+// This file is part of the Randomizer extension for Unity. Licensed under the
+// MIT license. See LICENSE file in the project root folder.
+
 using System.Collections;
+using UnityEngine;
 
-namespace OneDayGame {
+namespace RandomizerEx {
 
-	public class Randomizer : GameComponent {
+    /// <summary>
+    /// </summary>
+    /// <remarks>
+    ///     <list type="bullet">
+    ///         <item>
+    ///             Interval type inspector option will have
+    ///             effect only when the Start method is called.
+    ///         </item>
+    ///     </list>
+    /// </remarks>
+    public class Randomizer : MonoBehaviour {
+        #region INSPECTOR FIELDS
 
-		public enum IntervalTypes { Fixed, Random }
+        [SerializeField]
+        private float initDelay;
 
-		/// Result that the component returns.
-		///
-		/// This property can be read by another component in order to execute
-		/// action at a random intervals.
-		private bool _result;
-		public bool Result {
-			get { return _result; }
-		}
+        [SerializeField]
+        private float interval;
 
-		/// Initial delay.
-		[SerializeField]
-		private float _initDelay;
+        [SerializeField]
+        private IntervalTypes intervalType;
 
-		/// Time between consequent triggers.
-		[SerializeField]
-		private float _interval;
+        [SerializeField]
+        private float maxInterval;
 
-		/// Interval type.
-		[SerializeField]
-		private IntervalTypes _intervalType;
+        [SerializeField]
+        private float minInterval;
 
-		/// Minimum interval.
-		[SerializeField]
-		private float _minInterval;
+        #endregion INSPECTOR FIELDS
 
-		/// Maximum interval.
-		[SerializeField]
-		private float _maxInterval;
+        #region PROPERTIES
 
-		/// Helper variable.
-		///
-		/// In-game time to next trigger.
-		/// Used in 'Random' option.
-		private float _timeToTrigger;
+        public float InitDelay {
+            get { return initDelay; }
+            set { initDelay = value; }
+        }
 
-		public override void Awake() {
-			base.Awake();
-		}
+        /// <summary>
+        ///     Time between consequent state changes. Used with fixed interval
+        ///     type.
+        /// </summary>
+        public float Interval {
+            get { return interval; }
+            set { interval = value; }
+        }
 
-		public override void Start () {
-			base.Start();
+        /// <summary>
+        ///     Decides when class state will be toggled. For eg. it can be toggled
+        ///     in fixed time steps or randomly.
+        /// </summary>
+        public IntervalTypes IntervalType {
+            get { return intervalType; }
+            set { intervalType = value; }
+        }
 
-			// Handle 'Fixed' interval type.
-			if (_intervalType == IntervalTypes.Fixed) {
-				Invoke("Trigger", _initDelay);
-			}
-		}
+        public float MaxInterval {
+            get { return maxInterval; }
+            set { maxInterval = value; }
+        }
 
-		public override void Update () {
-			base.Update();
+        public float MinInterval {
+            get { return minInterval; }
+            set { minInterval = value; }
+        }
 
-			/// Handle 'Random' interval option.
-			if (_intervalType == IntervalTypes.Random) {
-				// Wait random interval before trigger.
-				if (Time.time > _timeToTrigger) {
-					float interval;
+        /// <summary>
+        ///     The class output value. Use it to trigger actions in your game.
+        /// </summary>
+        public bool State { get; private set; }
 
-					// Calculate new random interval.
-					interval = Random.Range(_minInterval, _maxInterval);
-					// Update time to next trigger.
-					_timeToTrigger = Time.time + interval;
+        /// <summary>
+        ///     Reference to coroutine responsible for toggling class state.
+        /// </summary>
+        public Task ToggleStateCoroutine { get; set; }
 
-					// Trigger.
-					_result = !_result;
-				}
-			}
-		}
+        #endregion PROPERTIES
 
-		public override void FixedUpdate() {
-			base.FixedUpdate();
-		}
+        #region UNITY MESSAGES
 
-		public override void LateUpdate() {
-			base.LateUpdate();
-		}
+        private void Start() {
+            if (IntervalType == IntervalTypes.Fixed) {
+                ToggleStateCoroutine = new Task(FixTimeTrigger());
+            }
 
-		/// Method that triggers the '_result' in time intervals.
-		private void Trigger() {
-			// Change component state right after initial delay.
-			_result = !_result;
+            if (IntervalType == IntervalTypes.Random) {
+                ToggleStateCoroutine = new Task(RandomTimeTrigger());
+            }
+        }
 
-			//  Change controller state in fixed intervals.
-			StartCoroutine(Timer.Start(
-						_interval,
-						true,
-						() => { _result = !_result; }
-						));
-		}
-	}
+        #endregion UNITY MESSAGES
+
+        #region METHODS
+
+        private IEnumerator FixTimeTrigger() {
+            yield return new WaitForSeconds(InitDelay);
+
+            while (true) {
+                State = !State;
+                yield return new WaitForSeconds(Interval);
+            }
+        }
+
+        private IEnumerator RandomTimeTrigger() {
+            yield return new WaitForSeconds(InitDelay);
+
+            while (true) {
+                // Toggle state.
+                State = !State;
+
+                // Calculate random time to wait.
+                var randomInterval = Random.Range(MinInterval, MaxInterval);
+
+                yield return new WaitForSeconds(randomInterval);
+            }
+        }
+
+        #endregion METHODS
+    }
+
 }
