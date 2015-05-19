@@ -70,26 +70,47 @@ namespace Randomizer {
 
         private void DrawFixedIntervalTypeFields() {
             EditorGUIUtility.labelWidth = 0;
-            EditorGUILayout.PropertyField(interval);
+            EditorGUILayout.PropertyField(
+                interval,
+                new GUIContent(
+                    "Interval",
+                    "How often to change state (in seconds)."));
         }
 
         private void DrawRandomIntervalTypeFields() {
             EditorGUILayout.BeginHorizontal();
+
             EditorGUIUtility.labelWidth = 80;
-            EditorGUILayout.PropertyField(minInterval);
-            EditorGUILayout.PropertyField(maxInterval);
+
+            EditorGUILayout.PropertyField(
+                minInterval,
+                new GUIContent(
+                    "Min. Interval",
+                    "Minimum interval before changing state."));
+
+            EditorGUILayout.PropertyField(
+                maxInterval,
+                new GUIContent(
+                    "Max. Interval",
+                    "Maximum interval before changing state."));
+
+            EditorGUIUtility.labelWidth = 0;
+
             EditorGUILayout.EndHorizontal();
         }
 
         private void DrawIntervalTypeDropdown() {
             EditorGUILayout.PropertyField(
                 intervalType,
-                new GUIContent("Type", "Type of the interval applied."));
+                new GUIContent("Type", "Type of the interval."));
         }
 
         private void DrawInitDelayField() {
             EditorGUILayout.PropertyField(
                 initDelay,
+                new GUIContent(
+                    "Init. Delay",
+                    "Initial delay applied after entering into play mode."),
                 GUILayout.MaxWidth(120));
         }
 
