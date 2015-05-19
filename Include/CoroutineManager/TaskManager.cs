@@ -5,7 +5,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Randomizer {
+namespace RandomizerEx {
 
     internal class TaskManager : MonoBehaviour {
 

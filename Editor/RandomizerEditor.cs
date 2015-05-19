@@ -8,7 +8,7 @@ using System.Collections;
 using UnityEditor;
 using OneDayGame;
 
-namespace Randomizer {
+namespace RandomizerEx {
 
     [CustomEditor(typeof (Randomizer))]
     public class RandomizerEditor : Editor {

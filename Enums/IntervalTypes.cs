@@ -3,7 +3,7 @@
 // This file is part of the Randomizer extension for Unity.
 // Licensed under the MIT license. See LICENSE file in the project root folder.
 
-namespace Randomizer {
+namespace RandomizerEx {
 
     public enum IntervalTypes { Fixed, Random }
 

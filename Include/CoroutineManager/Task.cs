@@ -55,7 +55,7 @@
 
 using System.Collections;
 
-namespace Randomizer {
+namespace RandomizerEx {
 
     /// A Task object represents a coroutine.  Tasks can be started, paused, and stopped.
     /// It is an error to attempt to start a task that has been stopped or which has
