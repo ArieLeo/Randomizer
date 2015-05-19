@@ -1,37 +1,26 @@
 ﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com)
-//  
-// This file is part of the Randomizer extension for Unity.
-// Licensed under the MIT license. See LICENSE file in the project root folder.
+// 
+// This file is part of the Randomizer extension for Unity. Licensed under the
+// MIT license. See LICENSE file in the project root folder.
 
-using UnityEngine;
-using System.Collections;
 using UnityEditor;
-using OneDayGame;
+using UnityEngine;
 
 namespace RandomizerEx {
 
     [CustomEditor(typeof (Randomizer))]
     public class RandomizerEditor : Editor {
-
         #region SERIALIZED PROPERTIES
 
         private SerializedProperty initDelay;
         private SerializedProperty interval;
         private SerializedProperty intervalType;
-        private SerializedProperty minInterval;
         private SerializedProperty maxInterval;
+        private SerializedProperty minInterval;
 
-        #endregion
+        #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
-
-        private void OnEnable() {
-            initDelay = serializedObject.FindProperty("initDelay");
-            interval = serializedObject.FindProperty("interval");
-            intervalType = serializedObject.FindProperty("intervalType");
-            minInterval = serializedObject.FindProperty("minInterval");
-            maxInterval = serializedObject.FindProperty("maxInterval");
-        }
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
@@ -53,20 +42,17 @@ namespace RandomizerEx {
             serializedObject.ApplyModifiedProperties();
         }
 
-        #endregion
+        private void OnEnable() {
+            initDelay = serializedObject.FindProperty("initDelay");
+            interval = serializedObject.FindProperty("interval");
+            intervalType = serializedObject.FindProperty("intervalType");
+            minInterval = serializedObject.FindProperty("minInterval");
+            maxInterval = serializedObject.FindProperty("maxInterval");
+        }
+
+        #endregion UNITY MESSAGES
 
         #region INSPECTOR METHODS
-
-        private void HandleIntervalTypeOption() {
-            switch (intervalType.enumValueIndex) {
-                case (int) IntervalTypes.Fixed:
-                    DrawFixedIntervalTypeFields();
-                    break;
-                case (int) IntervalTypes.Random:
-                    DrawRandomIntervalTypeFields();
-                    break;
-            }
-        }
 
         private void DrawFixedIntervalTypeFields() {
             EditorGUIUtility.labelWidth = 0;
@@ -75,6 +61,21 @@ namespace RandomizerEx {
                 new GUIContent(
                     "Interval",
                     "How often to change state (in seconds)."));
+        }
+
+        private void DrawInitDelayField() {
+            EditorGUILayout.PropertyField(
+                initDelay,
+                new GUIContent(
+                    "Init. Delay",
+                    "Initial delay applied after entering into play mode."),
+                GUILayout.MaxWidth(120));
+        }
+
+        private void DrawIntervalTypeDropdown() {
+            EditorGUILayout.PropertyField(
+                intervalType,
+                new GUIContent("Type", "Type of the interval."));
         }
 
         private void DrawRandomIntervalTypeFields() {
@@ -99,22 +100,19 @@ namespace RandomizerEx {
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawIntervalTypeDropdown() {
-            EditorGUILayout.PropertyField(
-                intervalType,
-                new GUIContent("Type", "Type of the interval."));
+        private void HandleIntervalTypeOption() {
+            switch (intervalType.enumValueIndex) {
+                case (int) IntervalTypes.Fixed:
+                    DrawFixedIntervalTypeFields();
+                    break;
+
+                case (int) IntervalTypes.Random:
+                    DrawRandomIntervalTypeFields();
+                    break;
+            }
         }
 
-        private void DrawInitDelayField() {
-            EditorGUILayout.PropertyField(
-                initDelay,
-                new GUIContent(
-                    "Init. Delay",
-                    "Initial delay applied after entering into play mode."),
-                GUILayout.MaxWidth(120));
-        }
-
-        #endregion
+        #endregion INSPECTOR METHODS
 
         #region METHODS
 
@@ -122,12 +120,11 @@ namespace RandomizerEx {
         private static void AddRandomizerComponent() {
             if (Selection.activeGameObject != null) {
                 Selection.activeGameObject.AddComponent(
-                    typeof(Randomizer));
+                    typeof (Randomizer));
             }
         }
 
-        #endregion
-
+        #endregion METHODS
     }
 
 }
