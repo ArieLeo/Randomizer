@@ -4,7 +4,7 @@
 Can be used to trigger animation transitions in random or fixed intervals.
 
 Licensed under MIT license. See LICENSE file in the project root folder.   
-Extensions with versions below 1.0.0 are considered to be pre/alpha and may not work properly.
+Extensions with version below 1.0.0 are considered to be pre/alpha and may not work properly.
 
 ![Randomizer](/Resources/cover_screenshot.png?raw=true)
 
@@ -22,7 +22,7 @@ Nothing here.
 2. Select game object in the hierarchy window and from the *Component* menu
    select *Randomizer* to add component to the selected game object.
 3. Select type from the dropdown and enter some interval values.
-4. In play mode *Randomizer* will change it's *State* public bool property in random intervals.
+4. In play mode, *Randomizer* will change it's *State* public bool property in random intervals.
    Read this property from other components.
 
 ## Help
