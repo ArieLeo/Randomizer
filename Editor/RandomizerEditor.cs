@@ -116,6 +116,18 @@ namespace Randomizer {
 
         #endregion
 
+        #region METHODS
+
+        [MenuItem("Component/Randomizer")]
+        private static void AddRandomizerComponent() {
+            if (Selection.activeGameObject != null) {
+                Selection.activeGameObject.AddComponent(
+                    typeof(Randomizer));
+            }
+        }
+
+        #endregion
+
     }
 
 }
