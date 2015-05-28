@@ -44,6 +44,9 @@ namespace RandomizerEx {
         [SerializeField]
         private UnityEvent stateOffCallback;
 
+        [SerializeField]
+        private int initStateOnProbability;
+
         #endregion INSPECTOR FIELDS
 
         #region PROPERTIES
@@ -107,9 +110,24 @@ namespace RandomizerEx {
             set { stateOffCallback = value; }
         }
 
+        /// <summary>
+        /// Probability that the initial state will be on.
+        /// </summary>
+        public int InitStateOnProbability {
+            get { return initStateOnProbability; }
+            set { initStateOnProbability = value; }
+        }
+
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
+
+        private void Awake() {
+            // Set initial state.
+            State = Random.value < InitStateOnProbability;
+
+            InvokeCallback();
+        }
 
         private void Start() {
             if (IntervalType == IntervalTypes.Fixed) {

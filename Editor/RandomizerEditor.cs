@@ -19,6 +19,7 @@ namespace RandomizerEx {
         private SerializedProperty minInterval;
         private SerializedProperty stateOnCallback;
         private SerializedProperty stateOffCallback;
+        private SerializedProperty initStateOnProbability;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -26,6 +27,8 @@ namespace RandomizerEx {
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
+
+            DrawInitStateOnProbabilitySlider();
 
             EditorGUILayout.BeginHorizontal();
 
@@ -56,11 +59,23 @@ namespace RandomizerEx {
             maxInterval = serializedObject.FindProperty("maxInterval");
             stateOnCallback = serializedObject.FindProperty("stateOnCallback");
             stateOffCallback = serializedObject.FindProperty("stateOffCallback");
+            initStateOnProbability =
+                serializedObject.FindProperty("initStateOnProbability");
         }
 
         #endregion UNITY MESSAGES
 
         #region INSPECTOR METHODS
+        private void DrawInitStateOnProbabilitySlider() {
+            initStateOnProbability.intValue = EditorGUILayout.IntSlider(
+                new GUIContent(
+                    "Init Probability",
+                    "Probability that the initial state will be on."),
+                initStateOnProbability.intValue,
+                0,
+                100);
+        }
+
         private void DrawStateOnCallback() {
             EditorGUILayout.PropertyField(
                 stateOnCallback,
