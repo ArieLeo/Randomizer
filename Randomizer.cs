@@ -130,7 +130,19 @@ namespace RandomizerEx {
 
             while (true) {
                 State = !State;
+
+                InvokeCallback();
+
                 yield return new WaitForSeconds(Interval);
+            }
+        }
+
+        private void InvokeCallback() {
+            if (State) {
+                StateOnCallback.Invoke();
+            }
+            else {
+                StateOffCallback.Invoke();
             }
         }
 
@@ -140,6 +152,8 @@ namespace RandomizerEx {
             while (true) {
                 // Toggle state.
                 State = !State;
+
+                InvokeCallback();
 
                 // Calculate random time to wait.
                 var randomInterval = Random.Range(MinInterval, MaxInterval);
