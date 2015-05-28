@@ -17,6 +17,8 @@ namespace RandomizerEx {
         private SerializedProperty intervalType;
         private SerializedProperty maxInterval;
         private SerializedProperty minInterval;
+        private SerializedProperty stateOnCallback;
+        private SerializedProperty stateOffCallback;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -39,20 +41,42 @@ namespace RandomizerEx {
 
             HandleIntervalTypeOption();
 
+            EditorGUILayout.Space();
+
+            DrawStateOnCallback();
+            DrawStateOffCallback();
+
             serializedObject.ApplyModifiedProperties();
         }
-
         private void OnEnable() {
             initDelay = serializedObject.FindProperty("initDelay");
             interval = serializedObject.FindProperty("interval");
             intervalType = serializedObject.FindProperty("intervalType");
             minInterval = serializedObject.FindProperty("minInterval");
             maxInterval = serializedObject.FindProperty("maxInterval");
+            stateOnCallback = serializedObject.FindProperty("stateOnCallback");
+            stateOffCallback = serializedObject.FindProperty("stateOffCallback");
         }
 
         #endregion UNITY MESSAGES
 
         #region INSPECTOR METHODS
+        private void DrawStateOnCallback() {
+            EditorGUILayout.PropertyField(
+                stateOnCallback,
+                new GUIContent(
+                    "State On Callback",
+                    "Callback executed when state changes to on."));
+        }
+
+        private void DrawStateOffCallback() {
+            EditorGUILayout.PropertyField(
+                stateOffCallback,
+                new GUIContent(
+                    "State Off Callback",
+                    "Callback executed when state changes to off."));
+        }
+
 
         private void DrawFixedIntervalTypeFields() {
             EditorGUIUtility.labelWidth = 0;

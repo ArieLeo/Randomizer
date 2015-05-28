@@ -5,9 +5,11 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RandomizerEx {
 
+    // todo move remarks to the github docs
     /// <summary>
     /// </summary>
     /// <remarks>
@@ -35,6 +37,12 @@ namespace RandomizerEx {
 
         [SerializeField]
         private float minInterval;
+
+        [SerializeField]
+        private UnityEvent stateOnCallback;
+
+        [SerializeField]
+        private UnityEvent stateOffCallback;
 
         #endregion INSPECTOR FIELDS
 
@@ -82,6 +90,22 @@ namespace RandomizerEx {
         ///     Reference to coroutine responsible for toggling class state.
         /// </summary>
         public Task ToggleStateCoroutine { get; set; }
+
+        /// <summary>
+        /// Callback execute on state changed to on.
+        /// </summary>
+        public UnityEvent StateOnCallback {
+            get { return stateOnCallback; }
+            set { stateOnCallback = value; }
+        }
+
+        /// <summary>
+        /// Callback execute on state changed to off.
+        /// </summary>
+        public UnityEvent StateOffCallback {
+            get { return stateOffCallback; }
+            set { stateOffCallback = value; }
+        }
 
         #endregion PROPERTIES
 
