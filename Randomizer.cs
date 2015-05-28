@@ -45,7 +45,7 @@ namespace RandomizerEx {
         private UnityEvent stateOffCallback;
 
         [SerializeField]
-        private int initStateOnProbability;
+        private float initStateOnProbability;
 
         #endregion INSPECTOR FIELDS
 
@@ -113,7 +113,7 @@ namespace RandomizerEx {
         /// <summary>
         /// Probability that the initial state will be on.
         /// </summary>
-        public int InitStateOnProbability {
+        public float InitStateOnProbability {
             get { return initStateOnProbability; }
             set { initStateOnProbability = value; }
         }

@@ -67,13 +67,13 @@ namespace RandomizerEx {
 
         #region INSPECTOR METHODS
         private void DrawInitStateOnProbabilitySlider() {
-            initStateOnProbability.intValue = EditorGUILayout.IntSlider(
+            initStateOnProbability.floatValue = EditorGUILayout.Slider(
                 new GUIContent(
                     "Init Probability",
                     "Probability that the initial state will be on."),
-                initStateOnProbability.intValue,
+                initStateOnProbability.floatValue,
                 0,
-                100);
+                1);
         }
 
         private void DrawStateOnCallback() {
