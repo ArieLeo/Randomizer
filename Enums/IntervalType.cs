@@ -5,6 +5,6 @@
 
 namespace RandomizerEx {
 
-    public enum IntervalTypes { Fixed, Random }
+    public enum IntervalType { Fixed, Random }
 
 }

@@ -17,8 +17,7 @@ namespace RandomizerEx {
         private SerializedProperty intervalType;
         private SerializedProperty maxInterval;
         private SerializedProperty minInterval;
-        private SerializedProperty stateOnCallback;
-        private SerializedProperty stateOffCallback;
+        private SerializedProperty triggerCallback;
         private SerializedProperty initStateOnProbability;
 
         #endregion SERIALIZED PROPERTIES
@@ -46,8 +45,7 @@ namespace RandomizerEx {
 
             EditorGUILayout.Space();
 
-            DrawStateOnCallback();
-            DrawStateOffCallback();
+            DrawTriggerCallback();
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -57,8 +55,7 @@ namespace RandomizerEx {
             intervalType = serializedObject.FindProperty("intervalType");
             minInterval = serializedObject.FindProperty("minInterval");
             maxInterval = serializedObject.FindProperty("maxInterval");
-            stateOnCallback = serializedObject.FindProperty("stateOnCallback");
-            stateOffCallback = serializedObject.FindProperty("stateOffCallback");
+            triggerCallback = serializedObject.FindProperty("triggerCallback");
             initStateOnProbability =
                 serializedObject.FindProperty("initStateOnProbability");
         }
@@ -76,22 +73,13 @@ namespace RandomizerEx {
                 1);
         }
 
-        private void DrawStateOnCallback() {
+        private void DrawTriggerCallback() {
             EditorGUILayout.PropertyField(
-                stateOnCallback,
+                triggerCallback,
                 new GUIContent(
-                    "State On Callback",
-                    "Callback executed when state changes to on."));
+                    "Trigger Callback",
+                    "Callback executed in time intervals."));
         }
-
-        private void DrawStateOffCallback() {
-            EditorGUILayout.PropertyField(
-                stateOffCallback,
-                new GUIContent(
-                    "State Off Callback",
-                    "Callback executed when state changes to off."));
-        }
-
 
         private void DrawFixedIntervalTypeFields() {
             EditorGUIUtility.labelWidth = 0;
@@ -141,11 +129,11 @@ namespace RandomizerEx {
 
         private void HandleIntervalTypeOption() {
             switch (intervalType.enumValueIndex) {
-                case (int) IntervalTypes.Fixed:
+                case (int) IntervalType.Fixed:
                     DrawFixedIntervalTypeFields();
                     break;
 
-                case (int) IntervalTypes.Random:
+                case (int) IntervalType.Random:
                     DrawRandomIntervalTypeFields();
                     break;
             }

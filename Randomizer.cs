@@ -30,7 +30,7 @@ namespace RandomizerEx {
         private float interval;
 
         [SerializeField]
-        private IntervalTypes intervalType;
+        private IntervalType intervalType;
 
         [SerializeField]
         private float maxInterval;
@@ -39,10 +39,7 @@ namespace RandomizerEx {
         private float minInterval;
 
         [SerializeField]
-        private UnityEvent stateOnCallback;
-
-        [SerializeField]
-        private UnityEvent stateOffCallback;
+        private UnityEvent triggerCallback;
 
         [SerializeField]
         private float initStateOnProbability;
@@ -69,7 +66,7 @@ namespace RandomizerEx {
         ///     Decides when class state will be toggled. For eg. it can be toggled
         ///     in fixed time steps or randomly.
         /// </summary>
-        public IntervalTypes IntervalType {
+        public IntervalType IntervalType {
             get { return intervalType; }
             set { intervalType = value; }
         }
@@ -85,11 +82,6 @@ namespace RandomizerEx {
         }
 
         /// <summary>
-        ///     The class output value. Use it to trigger actions in your game.
-        /// </summary>
-        public bool State { get; private set; }
-
-        /// <summary>
         ///     Reference to coroutine responsible for toggling class state.
         /// </summary>
         public Task ToggleStateCoroutine { get; set; }
@@ -97,17 +89,9 @@ namespace RandomizerEx {
         /// <summary>
         /// Callback execute on state changed to on.
         /// </summary>
-        public UnityEvent StateOnCallback {
-            get { return stateOnCallback; }
-            set { stateOnCallback = value; }
-        }
-
-        /// <summary>
-        /// Callback execute on state changed to off.
-        /// </summary>
-        public UnityEvent StateOffCallback {
-            get { return stateOffCallback; }
-            set { stateOffCallback = value; }
+        public UnityEvent TriggerCallback {
+            get { return triggerCallback; }
+            set { triggerCallback = value; }
         }
 
         /// <summary>
@@ -123,44 +107,40 @@ namespace RandomizerEx {
         #region UNITY MESSAGES
 
         private void Awake() {
-            // Set initial state.
-            State = Random.value < InitStateOnProbability;
-
-            InvokeCallback();
+            HandleInitStateOnProbability();
         }
 
         private void Start() {
-            if (IntervalType == IntervalTypes.Fixed) {
-                ToggleStateCoroutine = new Task(FixTimeTrigger());
-            }
-
-            if (IntervalType == IntervalTypes.Random) {
-                ToggleStateCoroutine = new Task(RandomTimeTrigger());
-            }
+            HandleIntervalType();
         }
-
         #endregion UNITY MESSAGES
 
         #region METHODS
+        private void HandleIntervalType() {
+            switch (IntervalType) {
+                case IntervalType.Fixed:
+                    ToggleStateCoroutine = new Task(FixTimeTrigger());
+
+                    break;
+                case IntervalType.Random:
+                    ToggleStateCoroutine = new Task(RandomTimeTrigger());
+
+                    break;
+            }
+        }
+
+        private void HandleInitStateOnProbability() {
+            if (Random.value < InitStateOnProbability) TriggerCallback.Invoke();
+        }
+
 
         private IEnumerator FixTimeTrigger() {
             yield return new WaitForSeconds(InitDelay);
 
             while (true) {
-                State = !State;
-
-                InvokeCallback();
+                TriggerCallback.Invoke();
 
                 yield return new WaitForSeconds(Interval);
-            }
-        }
-
-        private void InvokeCallback() {
-            if (State) {
-                StateOnCallback.Invoke();
-            }
-            else {
-                StateOffCallback.Invoke();
             }
         }
 
@@ -168,10 +148,7 @@ namespace RandomizerEx {
             yield return new WaitForSeconds(InitDelay);
 
             while (true) {
-                // Toggle state.
-                State = !State;
-
-                InvokeCallback();
+                TriggerCallback.Invoke();
 
                 // Calculate random time to wait.
                 var randomInterval = Random.Range(MinInterval, MaxInterval);
