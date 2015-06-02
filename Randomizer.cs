@@ -130,7 +130,9 @@ namespace RandomizerEx {
         }
 
         private void HandleInitStateOnProbability() {
-            if (Random.value < InitStateOnProbability) TriggerCallback.Invoke();
+            if (Random.value < InitStateOnProbability) {
+                TriggerCallback.Invoke();
+            }
         }
 
 
@@ -138,9 +140,9 @@ namespace RandomizerEx {
             yield return new WaitForSeconds(InitDelay);
 
             while (true) {
-                TriggerCallback.Invoke();
-
                 yield return new WaitForSeconds(Interval);
+
+                TriggerCallback.Invoke();
             }
         }
 
@@ -148,12 +150,12 @@ namespace RandomizerEx {
             yield return new WaitForSeconds(InitDelay);
 
             while (true) {
-                TriggerCallback.Invoke();
-
                 // Calculate random time to wait.
                 var randomInterval = Random.Range(MinInterval, MaxInterval);
 
                 yield return new WaitForSeconds(randomInterval);
+
+                TriggerCallback.Invoke();
             }
         }
 

@@ -95,7 +95,9 @@ namespace RandomizerEx {
                 initDelay,
                 new GUIContent(
                     "Init. Delay",
-                    "Initial delay applied after entering into play mode."),
+                    "Initial delay applied after entering into play mode. " +
+                    "If delay is set to 3 and fixed time is set to 5 then " +
+                    "first trigger will occur after 8 seconds."),
                 GUILayout.MaxWidth(120));
         }
 
